@@ -34,19 +34,28 @@
       th {
         background-color: #eee;
       }
+      #loading {
+        display: none;
+        margin-top: 1rem;
+        font-weight: bold;
+        color: red;
+      }
     </style>
   </head>
   <body>
     <h1>채영이를 위한 선물 - CatchTable 포함 여부 확인기</h1>
     <p>상호명을 줄바꿈으로 입력하세요:</p>
     <textarea id="nameInput"></textarea>
-    <button onclick="checkNames()">확인</button>
+    <button id="checkBtn" onclick="checkNames()">확인</button>
+    <div id="loading">
+      처리중입니다 ^_^ 가져오는 정보가 많아서 오래 걸려요 잠시만 기다려주세요!
+    </div>
 
     <table id="resultTable" style="display: none">
       <thead>
         <tr>
           <th>상호명</th>
-          <th>catchtable.co.kr 포함여부</th>
+          <th>catchtable 링크 등록 여부</th>
         </tr>
       </thead>
       <tbody></tbody>
@@ -60,6 +69,8 @@
       }
 
       async function checkNames() {
+        const button = document.getElementById("checkBtn");
+        const loading = document.getElementById("loading");
         const input = document.getElementById("nameInput").value.trim();
         const names = input
           .split("\n")
@@ -68,6 +79,11 @@
 
         const tbody = document.querySelector("#resultTable tbody");
         tbody.innerHTML = "";
+        document.getElementById("resultTable").style.display = "table";
+
+        // UI 상태 변경
+        button.disabled = true;
+        loading.style.display = "block";
 
         for (const name of names) {
           const encoded = encodeURIComponent(name + " 지도");
@@ -130,8 +146,10 @@
           }
         }
 
-        document.getElementById("resultTable").style.display = "table";
-        alert("완료!");
+        // UI 복구
+        loading.style.display = "none";
+        button.disabled = false;
+        alert("완료! 채영아 1000원 입금해라 ~.~");
       }
     </script>
   </body>
